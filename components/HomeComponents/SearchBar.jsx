@@ -23,7 +23,7 @@ export default SearchBar
 const Styles = StyleSheet.create({
     searchComponent: {
         marginHorizontal: '5%',
-        backgroundColor: '#E1E1E1',
+        backgroundColor: '#fff',
         paddingTop: 10,
         paddingBottom: 10,
         borderRadius: 10,

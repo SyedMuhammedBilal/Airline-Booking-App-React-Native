@@ -4,15 +4,16 @@ import { createAppContainer } from 'react-navigation'
 import Home from '../screens/Home'
 import ReviewDetails from '../screens/ReviewDetails'
 import About from '../screens/About'
+import {Button} from 'react-native-elements/dist/buttons/Button'
 
 const screens = {
     Home: {
         screen: Home,
         // Navigation Options
-        navigationOptions: {
+        navigationOptions: {    
             title: null,
             headerStyle: {
-                // backgroundColor: 'grey'
+                borderBottomWidth: 0,
             }
         }
     }, 

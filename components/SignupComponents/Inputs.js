@@ -1,40 +1,47 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
-import Inputs from '../components/SignupComponents/Inputs';
 
-const Signup = ({ navigation }) => {
+const Inputs = () => {
+    const [text, setText] = useState('');
+
+    const changeHandler = (val) => {
+        setText(val)
+    }
 
     return (
         <View>
-            <View style={Styles.appleLogo}>
-                <Image style={Styles.appleLogoSize} source={require('../assets/AppleLogo.png')} />
+            <TextInput 
+                style={Styles.signupInput} 
+                placeholder="Name"
+                onChangeText={changeHandler}
+            />
+            <TextInput 
+                style={Styles.signupInput} 
+                placeholder="Email"
+            />
+            <TextInput 
+                style={Styles.signupInput} 
+                placeholder="Password"
+            />
+            <View style={Styles.checkbox}>
+                <CheckBox style={{width: 20, height: 20, borderColor: '#0A84FF'}} />
+                <Text style={Styles.checkBoxText}> I agree with our <Text style={{color: '#0A84FF'}}>terms</Text> and <Text style={{color: '#0A84FF'}}>condition</Text> </Text>
             </View>
-            <View>
-                <View style={Styles.heading}>
-                    <Text style={{fontSize: 35, fontWeight: 'bold'}}> Create account </Text>
-                    <Text style={{marginTop: 20, color: 'rgb(142, 142, 147)', marginBottom: 5}}> Create your account to continue using app,</Text>
-                    <Text style={{color: 'rgb(142, 142, 147)'}}> Have a good day </Text>
-                    
 
-                    <View style={Styles.inputContainer}>
-                        <Inputs />
-                        
-                        <View>
-                            <Text style={{color: 'rgb(142, 142, 147)', marginTop: '6%', textAlign: 'center',}}> 
-                                Already have an account?
-                                <TouchableOpacity style={{textAlign: 'center', marginTop: 0}}>
-                                    <Text style={{color: '#0A84FF'}}> Sign In </Text>
-                                </TouchableOpacity> 
-                            </Text> 
-                        </View>
-                    </View>
-                </View>
+            <View style={Styles.signupButton}>
+                <TouchableOpacity style={Styles.signupBtn}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 18,
+                        fontWeight: '600'
+                    }}> Sign Up </Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export default Signup
+export default Inputs
 
 const Styles = StyleSheet.create({
     appleLogo: {
