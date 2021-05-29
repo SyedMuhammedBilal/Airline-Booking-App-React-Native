@@ -9,6 +9,7 @@ import Login from './screens/Login'
 import Signup from './screens/Signup'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+// import { AppearanceProvider, useColorScheme } from "react-native-appearance";
 import Home from './screens/Home';
 
 const Tabstack = createBottomTabNavigator();
@@ -37,15 +38,21 @@ const SignupStackScreen = () => (
   </SignupStack.Navigator>
 )
 
-export default () => (
-  <NavigationContainer>
-    <TabStack.Navigator>
-      <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
-      <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
-      <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
-    </TabStack.Navigator>
-  </NavigationContainer>
-);
+export default function App() {
+  const scheme = useColorScheme();
+
+  return (
+    <AppearanceProvider>
+      <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+        <TabStack.Navigator>
+          <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
+          <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
+          <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
+        </TabStack.Navigator>
+      </NavigationContainer>
+    </AppearanceProvider>
+  )
+};
 
 const styles = StyleSheet.create({
   topSpacing: {

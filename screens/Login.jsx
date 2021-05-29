@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, useColorScheme } from 'react-native'
 import Inputs from '../components/LoginComponents/Inputs';
+const DarkLogo = require('../assets/AppleLogo.png');
+const LightLogo = require('../assets/whiteApple.png')
 
 const Login = ({ navigation }) => {
     const onPressHandler = () => {
@@ -8,13 +10,15 @@ const Login = ({ navigation }) => {
         navigation.push('Sign up')
     }
 
+    const scheme = useColorScheme();
+
     return (
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss();
         }}>
         <View>
             <View style={Styles.appleLogo}>
-                <Image style={Styles.appleLogoSize} source={require('../assets/AppleLogo.png')} />
+                <Image style={Styles.appleLogoSize} source={scheme === 'dark' ? LightLogo : DarkLogo} />
             </View>
             <View>
                 <View style={Styles.heading}>

@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox, useColorScheme } from 'react-native'
 import Inputs from '../components/SignupComponents/Inputs';
+const DarkLogo = require('../assets/AppleLogo.png');
+const LightLogo = require('../assets/whiteApple.png')
 
 const Signup = ({ navigation }) => {
     const onPressHandler = () => {
         // navigation, pop, goBack
         navigation.push('Home')
     }
+    const scheme = useColorScheme();
+
     return (
         <View>
             <View style={Styles.appleLogo}>
-                <Image style={Styles.appleLogoSize} source={require('../assets/AppleLogo.png')} />
+                <Image style={Styles.appleLogoSize} source={scheme === 'dark' ? LightLogo : DarkLogo} />
             </View>
             <View>
                 <View style={Styles.heading}>
@@ -25,7 +29,7 @@ const Signup = ({ navigation }) => {
                         <View>
                             <Text style={{color: 'rgb(142, 142, 147)', marginTop: '6%', textAlign: 'center',}}> 
                                 Already have an account?
-                                <TouchableOpacity onPress={() => navigation.push("Login")} style={{textAlign: 'center', marginTop: 0}}>
+                                <TouchableOpacity onPress={() => navigation.push("Login")} style={{textAlign: 'center', marginTop: 0,}}>
                                     <Text style={{color: '#0A84FF'}}> Sign In </Text>
                                 </TouchableOpacity> 
                             </Text> 

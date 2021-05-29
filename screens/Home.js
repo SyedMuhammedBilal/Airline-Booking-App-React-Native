@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     View, 
     Text, 
@@ -10,7 +10,9 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     ScrollView,
-    SafeAreaView
+    SafeAreaView,
+    StatusBar,
+    useColorScheme
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Avatar from '../components/Avatar.jsx'
@@ -22,17 +24,48 @@ import MainHeading from '../Global/MainHeading.js'
 import { dummyData } from '../Data/Data.js'
 import Carousel from '../components/HomeComponents/Carousel.js'
 import SmallCards from '../components/HomeComponents/SmallCards'
-
 import pic01 from '../assets/eme.png'
 import pic02 from '../assets/qantas.png'
 import pic03 from '../assets/pia.png'
 import pic04 from '../assets/tukrish2.png'
+import pic05 from '../assets/delta.png'
+import {useTheme} from '@react-navigation/native'
+import {color} from 'react-native-elements/dist/helpers'
 
 const Home = ({ navigation }) => {
+    const { colors } = useTheme();
+    const scheme = useColorScheme();
+    const DARK_THEME = 'dark-content'
+    const LIGHT_THEME = 'light-content'
+
+    const checkBar = () => {
+        if(scheme === 'dark') {
+         DARK_THEME   
+        } else {
+            LIGHT_THEME
+        }
+    };
+
     const onPressHandler = () => {
         // navigation, pop, goBack
         navigation.navigate('ReviewDetails')
     }
+
+    const Styles = StyleSheet.create({
+        container: {
+            color: colors.text
+        },
+        head: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginHorizontal: '5%',
+            marginBottom: '2%'
+        },
+        reviewData: {
+            backgroundColor: '#000'
+        },
+    })
 
     return (
         
@@ -42,6 +75,7 @@ const Home = ({ navigation }) => {
         >
          
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+             <StatusBar style={checkBar}  />
             <View  styles={Styles.container}>
                 <View style={Styles.head}>
                     <MainHeading name="Book your Flight" />
@@ -60,7 +94,7 @@ const Home = ({ navigation }) => {
                     <SmallCards width={134} left={30} top={135} height={170} imageWidth={60} topImg={20} leftImg={10} imageHeight={60} color01="#000" color02="#676767" image={pic02} />
                     <SmallCards width={354} left={30} height={154} top={325} imageWidth={135} imageHeight={75} topImg={10} leftImg={10} color01="#FF6091" color02="#5127DD" image={pic04} />
                     <SmallCards width={200} left={30} height={140} top={500} imageWidth={100} imageHeight={35} topImg={30} leftImg={10} color01="#A7FFE5" color02="#00CFC3" image={pic03} />
-                    <SmallCards width={134} left={250} height={140} top={500} imageWidth={105} imageHeight={105} topImg={0} leftImg={10} color01="#278EFF" color02="#6271FF" image={pic01} />
+                    <SmallCards width={134} left={250} height={140} top={500} imageWidth={65} imageHeight={65} topImg={10} leftImg={10} color01="#278EFF" color02="#6271FF" image={pic05} />
                 </View>
                 
                 {/* <Button title="Review details" onPress={onPressHandler} /> */}
@@ -74,16 +108,3 @@ const Home = ({ navigation }) => {
 };
 
 export default Home
-
-const Styles = StyleSheet.create({
-    head: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: '5%',
-        marginBottom: '2%'
-    },
-    reviewData: {
-        backgroundColor: '#000'
-    },
-})
