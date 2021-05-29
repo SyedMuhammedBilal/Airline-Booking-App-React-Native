@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import Inputs from '../components/LoginComponents/Inputs';
 
-const Login = () => {
+const Login = ({ navigation }) => {
+    const onPressHandler = () => {
+        // navigation, pop, goBack
+        navigation.push('Sign up')
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -20,10 +24,10 @@ const Login = () => {
 
                     <View style={Styles.inputContainer}>
                         
-                        <Inputs />
+                        <Inputs navigation={navigation} />
                         <Text style={{color: 'rgb(142, 142, 147)', marginTop: '7%', textAlign: 'center'}}> 
                             Don't have an account?
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={onPressHandler}>
                                 <Text style={{color: '#0A84FF'}}> Create an accout </Text>
                             </TouchableOpacity> 
                         </Text> 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
 
-const Inputs = () => {
+const Inputs = ({navigation}) => {
     const [text, setText] = useState('');
 
     const changeHandler = (val) => {
@@ -29,7 +29,7 @@ const Inputs = () => {
             </View>
 
             <View style={Styles.signupButton}>
-                <TouchableOpacity style={Styles.signupBtn}>
+                <TouchableOpacity onPress={() => navigation.push('Home')} style={Styles.signupBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

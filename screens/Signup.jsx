@@ -3,7 +3,10 @@ import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } 
 import Inputs from '../components/SignupComponents/Inputs';
 
 const Signup = ({ navigation }) => {
-
+    const onPressHandler = () => {
+        // navigation, pop, goBack
+        navigation.push('Home')
+    }
     return (
         <View>
             <View style={Styles.appleLogo}>
@@ -17,12 +20,12 @@ const Signup = ({ navigation }) => {
                     
 
                     <View style={Styles.inputContainer}>
-                        <Inputs />
+                        <Inputs navigation={navigation} />
                         
                         <View>
                             <Text style={{color: 'rgb(142, 142, 147)', marginTop: '6%', textAlign: 'center',}}> 
                                 Already have an account?
-                                <TouchableOpacity style={{textAlign: 'center', marginTop: 0}}>
+                                <TouchableOpacity onPress={() => navigation.push("Login")} style={{textAlign: 'center', marginTop: 0}}>
                                     <Text style={{color: '#0A84FF'}}> Sign In </Text>
                                 </TouchableOpacity> 
                             </Text> 
@@ -54,7 +57,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputContainer: {
-        marginTop: '15%',
+        marginTop: '22%',
         width: '90%'
     },  
     checkbox: {

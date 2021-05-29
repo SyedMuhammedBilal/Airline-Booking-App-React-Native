@@ -5,8 +5,16 @@ import Home from '../screens/Home'
 import ReviewDetails from '../screens/ReviewDetails'
 import About from '../screens/About'
 import {Button} from 'react-native-elements/dist/buttons/Button'
+import Login from '../screens/Login'
+import Signup from '../screens/Signup'
 
 const screens = {
+    Login: {
+        screen: Login,
+    },
+    Signup: {
+        screen: Signup
+    },
     Home: {
         screen: Home,
         // Navigation Options
@@ -22,7 +30,8 @@ const screens = {
     },
     About: {
         screen: About
-    }
+    },
+    
 }
 
 const DefaultStack = createStackNavigator(screens, {

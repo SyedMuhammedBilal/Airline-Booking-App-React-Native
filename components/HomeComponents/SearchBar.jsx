@@ -30,6 +30,7 @@ const Styles = StyleSheet.create({
         flexDirection: 'row'
     },
     searchInput: {
-        fontSize: 16
+        fontSize: 16,
+        width: '100%'
     }
 })

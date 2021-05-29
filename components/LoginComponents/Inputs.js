@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 
-const Inputs = () => {
+const Inputs = ({ navigation }) => {
     return (
         <View>
             <TextInput 
@@ -14,7 +14,7 @@ const Inputs = () => {
             />
 
             <View style={Styles.loginButton}>
-                <TouchableOpacity style={Styles.LoginBtn}>
+                <TouchableOpacity onPress={() => navigation.push('Home')} style={Styles.LoginBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

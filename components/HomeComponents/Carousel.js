@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, Dimensions, FlatList, Animated } from 'react-native'
 import CarouselItem from './CarouselListItem'
 
 
 const { width, heigth } = Dimensions.get('window')
-let flatList
+// let flatList
 
-function infiniteScroll(dataList){
+function infiniteScroll(dataList, mySlide) {
     const numberOfData = dataList.length
     let scrollValue = 0, scrolled = 0
 
-    setInterval(function() {
-        scrolled ++
-        if(scrolled < numberOfData)
-        scrollValue = scrollValue + width
+    setInterval(function () {
+        scrolled++
+        if (scrolled < numberOfData)
+            scrollValue = scrollValue + width
 
-        else{
+        else {
             scrollValue = 0
             scrolled = 0
         }
+        if (mySlide.current) {
+            mySlide.current.scrollToOffset({
+                animated: true,
+                offset: scrollValue,
+            });
+        }
 
-        this.flatList.scrollToOffset({ animated: true, offset: scrollValue})
-        
     }, 3000)
 }
 
-
 const Carousel = ({ data }) => {
-    const scrollX = new Animated.Value(0)
-    let position = Animated.divide(scrollX, width)
-    const [dataList, setDataList] = useState(data)
+    const mySlide = useRef();
 
-    useEffect(()=> {
-        setDataList(data)
-        infiniteScroll(dataList)
+    const scrollX = new Animated.Value(0);
+    let position = Animated.divide(scrollX, width);
+    const [dataList, setDataList] = useState(data);
+
+    useEffect(() => {
+        setDataList(data);
+        infiniteScroll(dataList, mySlide);
     })
 
 
@@ -41,7 +46,7 @@ const Carousel = ({ data }) => {
         return (
             <View>
                 <FlatList data={data}
-                ref = {(flatList) => {this.flatList = flatList}}
+                    ref={mySlide}
                     keyExtractor={(item, index) => 'key' + index}
                     horizontal
                     pagingEnabled
@@ -54,10 +59,10 @@ const Carousel = ({ data }) => {
                         return <CarouselItem item={item} />
                     }}
                     onScroll={Animated.event(
-                        [{ nativeEvent: { contentOffset: { x: scrollX } } }]
+                        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                        { useNativeDriver: false }
                     )}
                 />
-
                 <View style={styles.dotView}>
                     {data.map((_, i) => {
                         let opacity = position.interpolate({
@@ -78,12 +83,12 @@ const Carousel = ({ data }) => {
         )
     }
 
-    console.log('Please provide Images')
-    return null
+    console.log('Please provide Images');
+    return null;
 }
 
 const styles = StyleSheet.create({
     dotView: { flexDirection: 'row', justifyContent: 'center' }
 })
 
-export default Carousel
+export default Carousel;
