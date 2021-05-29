@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { StyleSheet, Text } from 'react-native'
 import { AppearanceProvider, useColorScheme } from "react-native-appearance";
@@ -17,6 +17,7 @@ const TabStack = createStackNavigator();
 const LoginStack = createStackNavigator();
 const SignupStack = createStackNavigator();
 const HomeStack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
@@ -39,16 +40,34 @@ const SignupStackScreen = () => (
 )
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [userToken, setUserToken] = useState('ndnwdw222455');
   const scheme = useColorScheme();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+  },[])
+
+  if(loading) {
+    <Text>Loading</Text>
+  }
 
   return (
     <AppearanceProvider>
       <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-        <TabStack.Navigator>
-          <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
-          <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
-          <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
-        </TabStack.Navigator>
+        {userToken ? (
+          <TabStack.Navigator>
+            <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
+          </TabStack.Navigator>
+        ): (
+          <AuthStack.Navigator>
+            <AuthStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
+            <AuthStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
+          </AuthStack.Navigator>
+        )}
+        
       </NavigationContainer>
     </AppearanceProvider>
   )

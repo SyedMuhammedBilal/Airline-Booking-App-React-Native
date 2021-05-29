@@ -38,7 +38,7 @@ const Home = ({ navigation }) => {
     const DARK_THEME = 'dark-content'
     const LIGHT_THEME = 'light-content'
 
-    const checkBar = () => {
+    const checkThemeColor = () => {
         if(scheme === 'dark') {
          DARK_THEME   
         } else {
@@ -75,7 +75,7 @@ const Home = ({ navigation }) => {
         >
          
          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-             <StatusBar style={checkBar}  />
+             <StatusBar style={checkThemeColor}  />
             <View  styles={Styles.container}>
                 <View style={Styles.head}>
                     <MainHeading name="Book your Flight" />
