@@ -31,6 +31,7 @@ import pic04 from '../assets/tukrish2.png'
 import pic05 from '../assets/delta.png'
 import {useTheme} from '@react-navigation/native'
 import {color} from 'react-native-elements/dist/helpers'
+import {AirlineData} from '../Data/AirlineData.js'
 
 const Home = ({ navigation }) => {
     const { colors } = useTheme();
@@ -89,16 +90,24 @@ const Home = ({ navigation }) => {
                     <MainHeading name="Available Flights" />
                 </View>
                 <View style={{marginTop: -125, flex: 1, height: 1000, flexGrow: 1}}>
-
-                    <SmallCards width={200} left={184} top={135} height={170} imageWidth={105} imageHeight={105} topImg={0} leftImg={10} color01="#E80B0B" color02="#DC4F00" image={pic01} />
-                    <SmallCards width={134} left={30} top={135} height={170} imageWidth={60} topImg={20} leftImg={10} imageHeight={60} color01="#000" color02="#676767" image={pic02} />
-                    <SmallCards width={354} left={30} height={154} top={325} imageWidth={135} imageHeight={75} topImg={10} leftImg={10} color01="#FF6091" color02="#5127DD" image={pic04} />
-                    <SmallCards width={200} left={30} height={140} top={500} imageWidth={100} imageHeight={35} topImg={30} leftImg={10} color01="#A7FFE5" color02="#00CFC3" image={pic03} />
-                    <SmallCards width={134} left={250} height={140} top={500} imageWidth={65} imageHeight={65} topImg={10} leftImg={10} color01="#278EFF" color02="#6271FF" image={pic05} />
+                    {AirlineData.map((items) => {
+                        return (
+                            <SmallCards 
+                                width={items.width} 
+                                left={items.left} 
+                                top={items.top} 
+                                height={items.height} 
+                                imageWidth={items.imageWidth} 
+                                imageHeight={items.imageHeight} 
+                                topImg={items.topImg} 
+                                leftImg={items.leftImg} 
+                                color01={items.color01} 
+                                color02={items.color02} 
+                                image={items.image} 
+                            />
+                        )
+                    })}
                 </View>
-                
-                {/* <Button title="Review details" onPress={onPressHandler} /> */}
-                {/* <NavigationBar /> */}
             </View>
             </ScrollView>
        
