@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
 
     const onPressHandler = () => {
         // navigation, pop, goBack
-        navigation.navigate('ReviewDetails')
+        navigation.navigate('Details')
     }
 
     const Styles = StyleSheet.create({
@@ -75,7 +75,7 @@ const Home = ({ navigation }) => {
         }}
         >
          
-         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
              <StatusBar style={checkThemeColor}  />
             <View  styles={Styles.container}>
                 <View style={Styles.head}>
@@ -92,19 +92,21 @@ const Home = ({ navigation }) => {
                 <View style={{marginTop: -125, flex: 1, height: 1000, flexGrow: 1}}>
                     {AirlineData.map((items) => {
                         return (
-                            <SmallCards 
-                                width={items.width} 
-                                left={items.left} 
-                                top={items.top} 
-                                height={items.height} 
-                                imageWidth={items.imageWidth} 
-                                imageHeight={items.imageHeight} 
-                                topImg={items.topImg} 
-                                leftImg={items.leftImg} 
-                                color01={items.color01} 
-                                color02={items.color02} 
-                                image={items.image} 
-                            />
+                            <TouchableOpacity onPress={onPressHandler} key={items.id}>
+                                <SmallCards 
+                                    width={items.width} 
+                                    left={items.left} 
+                                    top={items.top} 
+                                    height={items.height} 
+                                    imageWidth={items.imageWidth} 
+                                    imageHeight={items.imageHeight} 
+                                    topImg={items.topImg} 
+                                    leftImg={items.leftImg} 
+                                    color01={items.color01} 
+                                    color02={items.color02} 
+                                    image={items.image} 
+                                />
+                            </TouchableOpacity>
                         )
                     })}
                 </View>

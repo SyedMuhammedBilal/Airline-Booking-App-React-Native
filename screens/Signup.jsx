@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox, useColorScheme } from 'react-native'
 import Inputs from '../components/SignupComponents/Inputs';
+import {AuthContext} from '../store/context';
+
 const DarkLogo = require('../assets/AppleLogo.png');
 const LightLogo = require('../assets/whiteApple.png')
 

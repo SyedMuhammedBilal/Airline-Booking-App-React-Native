@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
 import {useTheme} from '@react-navigation/native'
+import {AuthContext} from '../../store/context'
+
 
 const Inputs = ({navigation}) => {
     const [text, setText] = useState('');
@@ -9,6 +11,8 @@ const Inputs = ({navigation}) => {
     const changeHandler = (val) => {
         setText(val)
     }
+
+    const { signUp } = React.useContext(AuthContext)
 
     const Styles = StyleSheet.create({
         appleLogo: {
@@ -84,7 +88,7 @@ const Inputs = ({navigation}) => {
             </View>
 
             <View style={Styles.signupButton}>
-                <TouchableOpacity onPress={() => navigation.push('Home')} style={Styles.signupBtn}>
+                <TouchableOpacity onPress={() => {signUp()}} style={Styles.signupBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

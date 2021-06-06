@@ -1,19 +1,32 @@
 import React from 'react'
-import { View, TextInput, StyleSheet } from 'react-native'
+import { View, TextInput, StyleSheet, useColorScheme } from 'react-native'
 import { Icon } from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
 
 const SearchBar = () => {
     const { colors } = useTheme();
 
+    const scheme = useColorScheme();
+    const DARK_THEME = '#fff'
+    const LIGHT_THEME = '#212121'
+
+    const checkThemeColor = () => {
+        if(scheme === 'dark') {
+            DARK_THEME   
+        } else {
+            LIGHT_THEME
+        }
+    };
+
     const Styles = StyleSheet.create({
         searchComponent: {
-            marginHorizontal: '5%',
-            backgroundColor: '#fff',
+            marginHorizontal: '4%',
+            backgroundColor: scheme === 'dark' ? 'rgb(72, 72, 74)' : '#fff',
             paddingTop: 10,
             paddingBottom: 10,
             borderRadius: 10,
-            flexDirection: 'row'
+            flexDirection: 'row',
+            zIndex: -1
         },
         searchInput: {
             fontSize: 16,
@@ -26,10 +39,11 @@ const SearchBar = () => {
                 <Icon
                     name="search"
                     style={{marginHorizontal: '2%'}}
-                    color="grey"
+                    color={scheme === 'dark' ? '#fff' : 'grey'}
                 />
                 <TextInput 
                     placeholder="Search"
+                    placeholderTextColor={scheme === "dark" ? '#fff' : 'grey'}
                     style={Styles.searchInput}
                 />
             </View>

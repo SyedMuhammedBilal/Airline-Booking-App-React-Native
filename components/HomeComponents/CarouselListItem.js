@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 3,
         elevation: 5, 
-        marginTop: 30
+        marginTop: 30,
     },
     textView: {
         position: 'absolute',

@@ -2,9 +2,11 @@ import React from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import {colors} from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
+import {AuthContext} from '../../store/context'
 
 const Inputs = ({ navigation }) => {
     const { colors } = useTheme();
+    const { signIn } = React.useContext(AuthContext)
 
     const Styles = StyleSheet.create({ 
         loginInput: {
@@ -43,7 +45,7 @@ const Inputs = ({ navigation }) => {
             />
 
             <View style={Styles.loginButton}>
-                <TouchableOpacity onPress={() => navigation.push('Home')} style={Styles.LoginBtn}>
+                <TouchableOpacity onPress={() => {signIn()}} style={Styles.LoginBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,
@@ -53,6 +55,6 @@ const Inputs = ({ navigation }) => {
             </View>
         </View>
     )
-}
+};
 
 export default Inputs

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet, Text, ActivityIndicator } from 'react-native'
 import { AppearanceProvider, useColorScheme } from "react-native-appearance";
 import { DefaultTheme, DarkTheme } from "@react-navigation/native";
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,6 +11,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 // import { AppearanceProvider, useColorScheme } from "react-native-appearance";
 import Home from './screens/Home';
+import ReviewDetails from './screens/ReviewDetails';
+import { AuthContext } from './store/context';
+
 
 const Tabstack = createBottomTabNavigator();
 const TabStack = createStackNavigator();
@@ -18,6 +21,7 @@ const LoginStack = createStackNavigator();
 const SignupStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const AuthStack = createStackNavigator();
+const DetailStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
@@ -25,6 +29,14 @@ const HomeStackScreen = () => (
       headerShown:  false 
     }} component={Home} />
   </HomeStack.Navigator>
+)
+
+const DetailStackScreen = () => (
+  <DetailStack.Navigator>
+    <DetailStack.Screen name="Details" options={{ 
+      headerShown:  false 
+    }} component={ReviewDetails} />
+  </DetailStack.Navigator>
 )
 
 const LoginStackScreen = () => (
@@ -41,8 +53,23 @@ const SignupStackScreen = () => (
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [userToken, setUserToken] = useState('ndnwdw222455');
+  const [userToken, setUserToken] = useState(null);
   const scheme = useColorScheme();
+
+  const authContext = React.useMemo(() => ({
+    signIn: () => {
+      setUserToken('hab34'),
+      setLoading(false);
+    },
+    signUp: () => {
+      setUserToken('hab34'),
+      setLoading(false);
+    },
+    signOut: () => {
+      setUserToken(null),
+      setLoading(false);
+    }
+  }), [])
 
   useEffect(() => {
     setTimeout(() => {
@@ -51,25 +78,32 @@ export default function App() {
   },[])
 
   if(loading) {
-    <Text>Loading</Text>
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />  
+      </View>
+    )
   }
 
   return (
-    <AppearanceProvider>
-      <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-        {userToken ? (
-          <TabStack.Navigator>
-            <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
-          </TabStack.Navigator>
-        ): (
-          <AuthStack.Navigator>
-            <AuthStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
-            <AuthStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
-          </AuthStack.Navigator>
-        )}
-        
-      </NavigationContainer>
-    </AppearanceProvider>
+    <AuthContext.Provider value={authContext}>
+      <AppearanceProvider>
+        <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+          {userToken ? (
+            <TabStack.Navigator>
+              <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
+              <TabStack.Screen name="Details" component={DetailStackScreen} />
+            </TabStack.Navigator>
+          ): (
+            <AuthStack.Navigator>
+              <AuthStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
+              <AuthStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
+            </AuthStack.Navigator>
+          )}
+
+        </NavigationContainer>
+      </AppearanceProvider>
+    </AuthContext.Provider>
   )
 };
 
