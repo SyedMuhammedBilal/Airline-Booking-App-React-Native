@@ -14,6 +14,7 @@ import {
     StatusBar,
     useColorScheme
 } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
 import { Icon } from 'react-native-elements'
 import Avatar from '../components/Avatar.jsx'
 import AvailableFlights from '../components/HomeComponents/AvailableFlights.jsx'
@@ -69,20 +70,27 @@ const Home = ({ navigation }) => {
             backgroundColor: '#000'
         },
         loginButton: {
-            marginTop: '50%',
+            marginTop: '55%',
             marginHorizontal: 35,
-            marginBottom: 50
+            marginBottom: 50,
+            backgroundColor: 'rgb(28, 28, 30)',
+            paddingBottom: 20,
+            paddingHorizontal: 20,
+            borderRadius: 8,
         },
         LoginBtn: {
             backgroundColor: '#fc3841',
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: 'space-around',
+            // alignItems: 'center',
             borderRadius:10,
             paddingTop: 15,
             paddingBottom: 15,
             borderRadius: 15,
             borderWidth: 1,
+            display:'flex',
+            flexDirection: 'row'
         }
+        // Shayansidd2002@gmail.com
     })
 
     return (
@@ -130,13 +138,17 @@ const Home = ({ navigation }) => {
                     
                 </View>
                 <View style={Styles.loginButton}>
-                <MainHeading name="Booked Flights" />
+                    <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        <AntDesign name="enviromento" size={30} color="white" style={{paddingRight: 6}} />
+                        <Text style={{fontSize: 28, fontWeight: '600', color: colors.text, paddingTop: 18, paddingBottom: 20}}> Booked Flights </Text>
+                    </View>
                 <TouchableOpacity onPress={() => {loginUser()}} style={Styles.LoginBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,
                         fontWeight: '600'
-                    }}> Booked flights </Text>
+                    }}> View Booked flights </Text>
+                    <AntDesign name="rightcircleo" size={24} color="white" />
                 </TouchableOpacity>
             </View>
             </View>
