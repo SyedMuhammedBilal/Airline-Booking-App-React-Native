@@ -10,7 +10,7 @@ const Avatar = () => {
     const { colors } = useTheme();
     const scheme = useColorScheme();
 
-    const { signOut } = React.useContext(AuthContext)
+    // const { signOut } = React.useContext(AuthContext)
 
     const showStatusBar = () => {
         setShowSettings(!showSettings)
@@ -56,7 +56,7 @@ const Avatar = () => {
             {
                 showSettings &&
                     <View style={Styles.settings}>
-                        <TouchableOpacity onPress={() => {signOut()}} style={Styles.logoutBtn}>
+                        <TouchableOpacity onPress={() => navigation.push('Login')} style={Styles.logoutBtn}>
                             <View style={Styles.btn}>
                                 <Text style={{color: '#fff'}}>Logout</Text>
                             </View>

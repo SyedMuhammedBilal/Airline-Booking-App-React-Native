@@ -62,8 +62,8 @@ const ReviewDetails = ({ navigation }) => {
 
     return (
         <View style={{flex: 1}}>
+            
             <ImageBackground
-
                 source={Pic}
                 style={styles.image}
                 imageStyle={{borderBottomLeftRadius: 30, borderBottomRightRadius: 30}}

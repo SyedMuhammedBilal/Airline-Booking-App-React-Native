@@ -34,6 +34,7 @@ import {color} from 'react-native-elements/dist/helpers'
 import {AirlineData} from '../Data/AirlineData.js'
 
 const Home = ({ navigation }) => {
+    const [user, setUser] = useState()
     const { colors } = useTheme();
     const scheme = useColorScheme();
     const DARK_THEME = 'dark-content'
@@ -50,6 +51,7 @@ const Home = ({ navigation }) => {
     const onPressHandler = () => {
         // navigation, pop, goBack
         navigation.navigate('Details')
+        // console.log(user)
     }
 
     const Styles = StyleSheet.create({
@@ -66,6 +68,21 @@ const Home = ({ navigation }) => {
         reviewData: {
             backgroundColor: '#000'
         },
+        loginButton: {
+            marginTop: '50%',
+            marginHorizontal: 35,
+            marginBottom: 50
+        },
+        LoginBtn: {
+            backgroundColor: '#fc3841',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius:10,
+            paddingTop: 15,
+            paddingBottom: 15,
+            borderRadius: 15,
+            borderWidth: 1,
+        }
     })
 
     return (
@@ -79,7 +96,7 @@ const Home = ({ navigation }) => {
              <StatusBar style={checkThemeColor}  />
             <View  styles={Styles.container}>
                 <View style={Styles.head}>
-                    <MainHeading name="Book your Flight" />
+                    <MainHeading name={`Hello`} />
                     <Avatar />
                 </View>
                 <SearchBar />
@@ -87,9 +104,9 @@ const Home = ({ navigation }) => {
                 <Carousel data={dummyData} />
 
                 <View style={{marginHorizontal: '5%', flex: 1, height: 100}}>
-                    <MainHeading name="Available Flights" />
+                    <MainHeading name="Book your Flight" />
                 </View>
-                <View style={{marginTop: -125, flex: 1, height: 1000, flexGrow: 1}}>
+                <View style={{marginTop: -125, flex: 1, height: 450, flexGrow: 1}}>
                     {AirlineData.map((items) => {
                         return (
                             <TouchableOpacity onPress={onPressHandler} key={items.id}>
@@ -109,7 +126,19 @@ const Home = ({ navigation }) => {
                             </TouchableOpacity>
                         )
                     })}
+                    
+                    
                 </View>
+                <View style={Styles.loginButton}>
+                <MainHeading name="Booked Flights" />
+                <TouchableOpacity onPress={() => {loginUser()}} style={Styles.LoginBtn}>
+                    <Text style={{
+                        color: '#fff',
+                        fontSize: 18,
+                        fontWeight: '600'
+                    }}> Booked flights </Text>
+                </TouchableOpacity>
+            </View>
             </View>
             </ScrollView>
        

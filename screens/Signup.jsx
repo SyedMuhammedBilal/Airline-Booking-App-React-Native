@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox, useColorScheme } from 'react-native'
 import Inputs from '../components/SignupComponents/Inputs';
 import {AuthContext} from '../store/context';
+import {useTheme} from '@react-navigation/native'
 
 const DarkLogo = require('../assets/AppleLogo.png');
 const LightLogo = require('../assets/whiteApple.png')
@@ -12,6 +13,7 @@ const Signup = ({ navigation }) => {
         navigation.push('Home')
     }
     const scheme = useColorScheme();
+    const { colors } = useTheme();
 
     return (
         <View>
@@ -20,7 +22,7 @@ const Signup = ({ navigation }) => {
             </View>
             <View>
                 <View style={Styles.heading}>
-                    <Text style={{fontSize: 35, fontWeight: 'bold'}}> Create account </Text>
+                    <Text style={{fontSize: 35, fontWeight: 'bold', color: colors.text}}> Create account </Text>
                     <Text style={{marginTop: 20, color: 'rgb(142, 142, 147)', marginBottom: 5}}> Create your account to continue using app,</Text>
                     <Text style={{color: 'rgb(142, 142, 147)'}}> Have a good day </Text>
                     

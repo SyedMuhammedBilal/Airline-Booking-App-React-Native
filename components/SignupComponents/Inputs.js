@@ -2,17 +2,60 @@ import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
 import {useTheme} from '@react-navigation/native'
 import {AuthContext} from '../../store/context'
+import {NavigationActions} from 'react-navigation'
 
 
 const Inputs = ({navigation}) => {
-    const [text, setText] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const [user, setUser] = useState({
+        name: name,
+        email: email,
+        password: password
+    });
+
     const { colors } = useTheme();
 
-    const changeHandler = (val) => {
-        setText(val)
+    const nameHandler = (val) => {
+        setName(val)
     }
 
-    const { signUp } = React.useContext(AuthContext)
+    const emailHandler = (val) => {
+        setEmail(val)
+    }
+
+    const passwordHandler = (val) => {
+        setPassword(val)
+    }
+
+    // let name, value;
+
+    const handleData = async (e) => {
+        const res = await fetch('http://localhost:8080/register', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            })
+        })
+
+        const data = res.json();
+
+         if(res.status === 422 || !data) {
+             console.log('an error occured!')
+         } else {
+             console.log('succesfull')
+            navigation.push('Login')
+        }
+    };
+
+    // const { signUp } = React.useContext(AuthContext)
 
     const Styles = StyleSheet.create({
         appleLogo: {
@@ -70,15 +113,23 @@ const Inputs = ({navigation}) => {
         <View>
             <TextInput 
                 style={Styles.signupInput} 
+                name="name"
                 placeholder="Name"
-                onChangeText={changeHandler}
+                value={name}
+                onChangeText={(val) => setName(val)}
             />
             <TextInput 
                 style={Styles.signupInput} 
+                name="email"
+                value={email}
+                onChangeText={(val) => setEmail(val)}
                 placeholder="Email"
             />
             <TextInput 
-                style={Styles.signupInput} 
+                style={Styles.signupInput}
+                name="password"
+                value={password} 
+                onChangeText={(val) => setPassword(val)}
                 secureTextEntry={true}
                 placeholder="Password"
             />
@@ -88,7 +139,7 @@ const Inputs = ({navigation}) => {
             </View>
 
             <View style={Styles.signupButton}>
-                <TouchableOpacity onPress={() => {signUp()}} style={Styles.signupBtn}>
+                <TouchableOpacity onPress={() => {handleData(); navigation.navigate('Login')} } style={Styles.signupBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

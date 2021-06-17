@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, useColorScheme } from 'react-native'
 import Inputs from '../components/LoginComponents/Inputs';
 import {AuthContext} from '../store/context';
+import {useTheme} from '@react-navigation/native'
 
 const DarkLogo = require('../assets/AppleLogo.png');
 const LightLogo = require('../assets/whiteApple.png')
@@ -12,7 +13,9 @@ const Login = ({ navigation }) => {
         navigation.push('Sign up')
     }
 
+    const { colors } = useTheme();
     const scheme = useColorScheme();
+
 
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -24,7 +27,7 @@ const Login = ({ navigation }) => {
             </View>
             <View>
                 <View style={Styles.heading}>
-                    <Text style={{fontSize: 35, fontWeight: 'bold'}}> Login </Text>
+                    <Text style={{fontSize: 35, fontWeight: 'bold', color: colors.text}}> Login </Text>
                     <Text style={{marginVertical: 20, color: 'rgb(142, 142, 147)'}}> Welcome back, </Text>
                     <Text style={{marginVertical: '-3.5%' ,color: 'rgb(142, 142, 147)'}}> Sign in to continue, Have a good day</Text>
 

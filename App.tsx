@@ -9,10 +9,13 @@ import Login from './screens/Login'
 import Signup from './screens/Signup'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 // import { AppearanceProvider, useColorScheme } from "react-native-appearance";
 import Home from './screens/Home';
 import ReviewDetails from './screens/ReviewDetails';
 import { AuthContext } from './store/context';
+import { DataLayer } from './store/index';
+import reducer, { initialState } from './store/reducer'
 
 
 const Tabstack = createBottomTabNavigator();
@@ -54,11 +57,12 @@ const SignupStackScreen = () => (
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+  const [userData, setUserData] = useState();
   const scheme = useColorScheme();
 
   const authContext = React.useMemo(() => ({
     signIn: () => {
-      setUserToken('hab34'),
+      setUserToken('ajc'),
       setLoading(false);
     },
     signUp: () => {
@@ -83,28 +87,22 @@ export default function App() {
         <ActivityIndicator size="large" />  
       </View>
     )
-  }
+  };
 
   return (
-    <AuthContext.Provider value={authContext}>
+    <DataLayer initialState={initialState} reducer={reducer}>
       <AppearanceProvider>
         <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-          {userToken ? (
             <TabStack.Navigator>
+              <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
+              <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
               <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
               <TabStack.Screen name="Details" component={DetailStackScreen} />
             </TabStack.Navigator>
-          ): (
-            <AuthStack.Navigator>
-              <AuthStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
-              <AuthStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
-            </AuthStack.Navigator>
-          )}
-
         </NavigationContainer>
       </AppearanceProvider>
-    </AuthContext.Provider>
-  )
+    </DataLayer>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -112,9 +110,3 @@ const styles = StyleSheet.create({
     marginTop: 50
   }
 });
-
-// return (
-//   // <AppearanceProvider>
-//   //   <Navigator theme={scheme === "dark" ? DarkTheme : DefaultTheme} />
-//   // </AppearanceProvider>
-// )
