@@ -142,7 +142,7 @@ const Home = ({ navigation }) => {
                         <AntDesign name="enviromento" size={30} color="white" style={{paddingRight: 6}} />
                         <Text style={{fontSize: 28, fontWeight: '600', color: colors.text, paddingTop: 18, paddingBottom: 20}}> Booked Flights </Text>
                     </View>
-                <TouchableOpacity onPress={() => {loginUser()}} style={Styles.LoginBtn}>
+                <TouchableOpacity style={Styles.LoginBtn}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

@@ -6,6 +6,7 @@ import {color} from 'react-native-elements/dist/helpers'
 import {colors} from 'react-native-elements'
 import {Feather} from '@expo/vector-icons'
 import {GalleryData} from '../Data/GalleryData'
+import Button from '../components/DetailsComponent/Button'
 
 const ReviewDetails = ({ navigation }) => {
     const { colors } = useTheme();
@@ -28,7 +29,7 @@ const ReviewDetails = ({ navigation }) => {
             justifyContent: 'center'
         },
         image: {
-            height: 430,
+            height: 450,
             justifyContent: 'flex-end'
         },
         tagLine: {
@@ -48,7 +49,7 @@ const ReviewDetails = ({ navigation }) => {
         BookTicketBtn: {
             position: 'absolute',
             right: 12, 
-            top: 400,
+            top: 420,
             backgroundColor: scheme === 'dark' ? DARK_THEME : LIGHT_THEME,
             padding: 16, 
             borderRadius: 40,
@@ -76,7 +77,7 @@ const ReviewDetails = ({ navigation }) => {
                 </TouchableOpacity>
             </ImageBackground>
 
-            <TouchableOpacity style={styles.BookTicketBtn}>
+            <TouchableOpacity onPress={() => navigation.navigate('Buy Now')} style={styles.BookTicketBtn}>
                 <Text style={styles.bookTicketText}>Book Now</Text>
             </TouchableOpacity>
 
