@@ -8,16 +8,30 @@ import Navigator from './Routes/homeStack'
 import Login from './screens/Login'
 import Signup from './screens/Signup'
 import BuyNow from './screens/BuyNow'
+import Success from './screens/Success' 
+import FlightsHistory from './screens/FlightsHistory'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 // import { AppearanceProvider, useColorScheme } from "react-native-appearance";
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { createHttpLink } from 'apollo-link-http'
+import { ApolloProvider } from '@apollo/react-hooks'
 import Home from './screens/Home';
 import ReviewDetails from './screens/ReviewDetails';
 import { AuthContext } from './store/context';
 import { DataLayer } from './store/index';
 import reducer, { initialState } from './store/reducer'
 
+const httpLink = createHttpLink({
+  uri: 'http://localhost:5000'
+})
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
 
 const Tabstack = createBottomTabNavigator();
 const TabStack = createStackNavigator();
@@ -25,6 +39,8 @@ const LoginStack = createStackNavigator();
 const SignupStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const BuyNowStack = createStackNavigator();
+const SuccessStack = createStackNavigator();
+const FlightsHistoryStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const DetailStack = createStackNavigator();
 
@@ -48,6 +64,18 @@ const BuyNowStackScreen = () => (
   <BuyNowStack.Navigator>
     <BuyNowStack.Screen name="Buy Now" options={{ headerShown:  false }} component={BuyNow} />
   </BuyNowStack.Navigator>
+)
+
+const SuccessStackScreen = () => (
+  <SuccessStack.Navigator>
+    <SuccessStack.Screen name="Success" options={{ headerShown:  false }} component={Success} />
+  </SuccessStack.Navigator>
+)
+
+const FlightsHistoryStackScreen = () => (
+  <FlightsHistoryStack.Navigator>
+    <FlightsHistoryStack.Screen name="Flights History" options={{ headerShown:  false }} component={FlightsHistory} />
+  </FlightsHistoryStack.Navigator>
 )
 
 const LoginStackScreen = () => (
@@ -100,15 +128,19 @@ export default function App() {
   return (
     <DataLayer initialState={initialState} reducer={reducer}>
       <AppearanceProvider>
+        <ApolloProvider client={client}>
         <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
             <TabStack.Navigator>
               <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
               <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
               <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
               <TabStack.Screen name="Details" options={{ headerShown:  false }} component={DetailStackScreen} />
+              <TabStack.Screen name="Success" options={{ headerShown:  false }} component={SuccessStackScreen} />
               <TabStack.Screen name="Buy Now" options={{headerStyle: {backgroundColor: '#000',borderBottomColor: '#000'}}} component={BuyNowStackScreen} />
+              <TabStack.Screen name="Flights History" component={FlightsHistoryStackScreen} />
             </TabStack.Navigator>
         </NavigationContainer>
+        </ApolloProvider>
       </AppearanceProvider>
     </DataLayer>
   );

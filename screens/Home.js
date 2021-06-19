@@ -69,7 +69,7 @@ const Home = ({ navigation }) => {
         reviewData: {
             backgroundColor: '#000'
         },
-        loginButton: {
+        bookButton: {
             marginTop: '55%',
             marginHorizontal: 35,
             marginBottom: 50,
@@ -78,7 +78,7 @@ const Home = ({ navigation }) => {
             paddingHorizontal: 20,
             borderRadius: 8,
         },
-        LoginBtn: {
+        bookBtn: {
             backgroundColor: '#fc3841',
             justifyContent: 'space-around',
             // alignItems: 'center',
@@ -137,12 +137,12 @@ const Home = ({ navigation }) => {
                     
                     
                 </View>
-                <View style={Styles.loginButton}>
+                <View style={Styles.bookButton}>
                     <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <AntDesign name="enviromento" size={30} color="white" style={{paddingRight: 6}} />
                         <Text style={{fontSize: 28, fontWeight: '600', color: colors.text, paddingTop: 18, paddingBottom: 20}}> Booked Flights </Text>
                     </View>
-                <TouchableOpacity style={Styles.LoginBtn}>
+                <TouchableOpacity style={Styles.bookBtn} onPress={() => navigation.navigate('Flights History')}>
                     <Text style={{
                         color: '#fff',
                         fontSize: 18,

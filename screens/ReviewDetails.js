@@ -72,7 +72,7 @@ const ReviewDetails = ({ navigation }) => {
                 <Text style={styles.tagLine}> Discover Dubai </Text>
                 <Text style={styles.placename}>Explore the scenic beauty of huge buildings </Text>
 
-                <TouchableOpacity style={{position: 'absolute', right: 20, top: 40, backgroundColor: '#fff', padding: 10, borderRadius: 40}}>
+                <TouchableOpacity style={{position: 'absolute', right: 20, top: 70, backgroundColor: '#fff', padding: 10, borderRadius: 40}}>
                     <Feather name="heart" size={22} color="red" />
                 </TouchableOpacity>
             </ImageBackground>

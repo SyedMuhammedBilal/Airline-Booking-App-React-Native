@@ -3,12 +3,30 @@ import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } 
 import {useTheme} from '@react-navigation/native'
 import {AuthContext} from '../../store/context'
 import {NavigationActions} from 'react-navigation'
-
+import gql from 'graphql-tag'
+import {useMutation} from '@apollo/react-hooks'
+import { ActivityIndicator } from "react-native";
 
 const Inputs = ({navigation}) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState(null)
+    
+    const [addUser, { loading }] = useMutation(REGISTER_USER, {
+        update(_, result) {
+            console.log(result)
+            navigation.navigate('Login')
+        },
+        onError(error) {
+            setErrors('please enter all fields')
+        },
+        variables: {
+            username: name,
+            email: email,
+            password: password
+        }
+    })
 
     const [user, setUser] = useState({
         name: name,
@@ -30,32 +48,9 @@ const Inputs = ({navigation}) => {
         setPassword(val)
     }
 
-    // let name, value;
-
-    const handleData = async (e) => {
-        const res = await fetch('http://localhost:8080/register', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                password: password
-            })
-        })
-
-        const data = res.json();
-
-         if(res.status === 422 || !data) {
-             console.log('an error occured!')
-         } else {
-             console.log('succesfull')
-            navigation.push('Login')
-        }
+    const handleData = (e) => {
+        addUser()
     };
-
-    // const { signUp } = React.useContext(AuthContext)
 
     const Styles = StyleSheet.create({
         appleLogo: {
@@ -115,12 +110,16 @@ const Inputs = ({navigation}) => {
                 style={Styles.signupInput} 
                 name="name"
                 placeholder="Name"
+                autoCapitalize='none'
+                autoCorrect={false}
                 value={name}
                 onChangeText={(val) => setName(val)}
             />
             <TextInput 
                 style={Styles.signupInput} 
                 name="email"
+                autoCapitalize='none'
+                autoCorrect={false}
                 value={email}
                 onChangeText={(val) => setEmail(val)}
                 placeholder="Email"
@@ -128,6 +127,8 @@ const Inputs = ({navigation}) => {
             <TextInput 
                 style={Styles.signupInput}
                 name="password"
+                autoCapitalize='none'
+                autoCorrect={false}
                 value={password} 
                 onChangeText={(val) => setPassword(val)}
                 secureTextEntry={true}
@@ -139,16 +140,42 @@ const Inputs = ({navigation}) => {
             </View>
 
             <View style={Styles.signupButton}>
-                <TouchableOpacity onPress={() => {handleData(); navigation.navigate('Login')} } style={Styles.signupBtn}>
-                    <Text style={{
-                        color: '#fff',
-                        fontSize: 18,
-                        fontWeight: '600'
-                    }}> Sign Up </Text>
-                </TouchableOpacity>
+                {loading ? 
+                    <ActivityIndicator />
+                    : 
+                        <TouchableOpacity onPress={() => handleData() } style={Styles.signupBtn}>
+                            <Text style={{
+                                color: '#fff',
+                                fontSize: 18,
+                                fontWeight: '600'
+                            }}> Sign Up </Text>
+                        </TouchableOpacity> 
+                }
+                
             </View>
         </View>
     )
 }
+
+const REGISTER_USER = gql`
+    mutation register( 
+        $username: String!
+        $email: String!
+        $password: String!
+    ) {
+        register (
+            registerInput: {
+                username: $username
+                email: $email
+                password: $password
+            }
+        ) {
+            id
+            email
+            password
+            token
+        }
+    }
+`
 
 export default Inputs

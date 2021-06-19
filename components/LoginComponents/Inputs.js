@@ -4,39 +4,35 @@ import {colors} from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
 import {AuthContext} from '../../store/context'
 import {useDataLayerValue} from '../../store'
+import gql from 'graphql-tag'
+import {useMutation} from '@apollo/react-hooks'
+import { ActivityIndicator } from "react-native";
 
 const Inputs = ({ navigation }) => {
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [userData, setUserData] = useState(null);
+    const [errors, setErros] = useState(null);
     const [{ user, token }, dispatch] = useDataLayerValue();
 
     const { colors } = useTheme();
     // const { signIn } = React.useContext(AuthContext);
 
-    const loginUser = async () => {
-        const res = await fetch('http://localhost:8080/signin', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email:email, 
-                password: password
-            })
-        })
-
-        const data = await res.json();
-        // console.log(data);
-        setUserData(data)
-
-        if(res.status === 400 || !data) {
-            console.log('invalid credentials')
-        } else {
-            console.log('user login successful')
-           
+    const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+        update(_, result) {
             navigation.navigate('Home')
+        },
+        onError(error) {
+            setErrors('please enter all fields')
+        },
+        variables: {
+            email: email,
+            password: password
         }
+    })
+
+    const login = () => {
+        loginUser()
     }
 
     useEffect(() => {
@@ -97,16 +93,38 @@ const Inputs = ({ navigation }) => {
             />
 
             <View style={Styles.loginButton}>
-                <TouchableOpacity onPress={() => {loginUser()}} style={Styles.LoginBtn}>
-                    <Text style={{
-                        color: '#fff',
-                        fontSize: 18,
-                        fontWeight: '600'
-                    }}> Sign In </Text>
-                </TouchableOpacity>
+                {loading ? 
+                    <ActivityIndicator />
+                    : 
+                        <TouchableOpacity onPress={() => {login()} } style={Styles.LoginBtn}>
+                            <Text style={{
+                                color: '#fff',
+                                fontSize: 18,
+                                fontWeight: '600'
+                            }}> Sign In </Text>
+                        </TouchableOpacity> 
+                }
             </View>
         </View>
     )
 };
+
+const LOGIN_USER = gql`
+    mutation login(
+        $email: String!
+        $password: String!
+    ) {
+        login(
+            email: $email
+            password: $password
+        ) {
+            id
+            email
+            username
+            token
+            createdAt
+        }
+    }
+`
 
 export default Inputs
