@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
 import {colors} from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
-import {AuthContext} from '../../store/context'
 import {useDataLayerValue} from '../../store'
 import gql from 'graphql-tag'
 import {useMutation} from '@apollo/react-hooks'
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";   
+import { AuthContext } from '../../store/context'
 
 const Inputs = ({ navigation }) => {
+    const context = useContext(AuthContext);
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [userData, setUserData] = useState(null);
@@ -16,10 +17,11 @@ const Inputs = ({ navigation }) => {
     const [{ user, token }, dispatch] = useDataLayerValue();
 
     const { colors } = useTheme();
-    // const { signIn } = React.useContext(AuthContext);
 
     const [loginUser, { loading }] = useMutation(LOGIN_USER, {
-        update(_, result) {
+        update(_, { data: { login: userData } }) {
+            console.log("===>", userData);
+            context.login(userData)
             navigation.navigate('Home')
         },
         onError(error) {

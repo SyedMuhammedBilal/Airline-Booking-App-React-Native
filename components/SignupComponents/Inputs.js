@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
 import {useTheme} from '@react-navigation/native'
-import {AuthContext} from '../../store/context'
 import {NavigationActions} from 'react-navigation'
 import gql from 'graphql-tag'
 import {useMutation} from '@apollo/react-hooks'
 import { ActivityIndicator } from "react-native";
+import { AuthContext } from '../../store/context'
 
 const Inputs = ({navigation}) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState(null);
+    const context = useContext(AuthContext)
     
     const [addUser, { loading }] = useMutation(REGISTER_USER, {
-        update(_, result) {
-            console.log(result)
+        update(_, { data: { register: userData } }) {
+            console.log(userData)
+            context.login(userData)
             navigation.navigate('Login')
         },
         onError(error) {

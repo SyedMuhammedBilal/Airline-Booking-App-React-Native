@@ -1,22 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Image, View, StyleSheet, TouchableOpacity, Text, useColorScheme,  } from 'react-native'
 import { Icon } from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
 import {AuthContext} from '../store/context'
-// import {BlurView} from 'expo';
+import { AntDesign } from '@expo/vector-icons';
 
-const Avatar = () => {
+const Avatar = ({ nav }) => {
     const [showSettings, setShowSettings] = useState(false)
     const { colors } = useTheme();
     const scheme = useColorScheme();
 
     // const { signOut } = React.useContext(AuthContext)
+    const { logout } = useContext(AuthContext)
+
 
     const showStatusBar = () => {
         setShowSettings(!showSettings)
     }
 
     const Styles = StyleSheet.create({
+        avatar: {
+            
+        },
         avatarImage: {
             width: 40,
             height: 40,
@@ -27,7 +32,7 @@ const Avatar = () => {
             height: 80,
             position: 'absolute',
             backgroundColor: scheme === 'dark' ? 'rgb(44, 44, 46)' : '#fff',
-            top: 50,
+            top: 60,
             zIndex: 6,
             right: 0,
             borderRadius: 8,
@@ -48,15 +53,20 @@ const Avatar = () => {
         }
     })
 
+    const logoutUser = () => {
+        logout()
+    }
+
     return (
         <View style={Styles.avatar}>
-            <TouchableOpacity onPress={showStatusBar}>
-                <Image style={Styles.avatarImage}  source={require('../assets/bieber.jpeg')} />
+            <TouchableOpacity style={{ backgroundColor: 'rgb(44, 44, 46)', borderRadius: 50, marginTop: 10, }} onPress={showStatusBar}>
+                {/* <Image style={Styles.avatarImage}  source={require('../assets/bieber.jpeg')} /> */}
+                <AntDesign style={{padding: 5,}} name="user" size={30} color="white" />
             </TouchableOpacity>
             {
                 showSettings &&
                     <View style={Styles.settings}>
-                        <TouchableOpacity onPress={() => navigation.push('Login')} style={Styles.logoutBtn}>
+                        <TouchableOpacity onPress={() => {logoutUser(); nav.navigate('Login')}} style={Styles.logoutBtn}>
                             <View style={Styles.btn}>
                                 <Text style={{color: '#fff'}}>Logout</Text>
                             </View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     View, 
     Text, 
@@ -33,9 +33,13 @@ import pic05 from '../assets/delta.png'
 import {useTheme} from '@react-navigation/native'
 import {color} from 'react-native-elements/dist/helpers'
 import {AirlineData} from '../Data/AirlineData.js'
+import GradientText from '../Global/GradientText';
+import { AuthContext } from '../store/context.js';
+
 
 const Home = ({ navigation }) => {
-    const [user, setUser] = useState()
+    const { user, logout } = useContext(AuthContext)
+    const [users, setUsers] = useState()
     const { colors } = useTheme();
     const scheme = useColorScheme();
     const DARK_THEME = 'dark-content'
@@ -104,8 +108,9 @@ const Home = ({ navigation }) => {
              <StatusBar style={checkThemeColor}  />
             <View  styles={Styles.container}>
                 <View style={Styles.head}>
-                    <MainHeading name={`Hello`} />
-                    <Avatar />
+                    {/* <MainHeading name={`Hello`} />  */}
+                    <GradientText style={{marginTop: 20, fontSize: 30, fontWeight: '700', marginBottom: 10 }} color01="#3ef4f7" color02="#0c8ffa">Hello {user && user.username}</GradientText>
+                    <Avatar nav={navigation} />
                 </View>
                 <SearchBar />
                 

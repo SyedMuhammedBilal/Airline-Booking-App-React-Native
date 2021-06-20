@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View } from 'react-native';
 import { StyleSheet, Text, ActivityIndicator } from 'react-native'
 import { AppearanceProvider, useColorScheme } from "react-native-appearance";
@@ -20,9 +20,10 @@ import { createHttpLink } from 'apollo-link-http'
 import { ApolloProvider } from '@apollo/react-hooks'
 import Home from './screens/Home';
 import ReviewDetails from './screens/ReviewDetails';
-import { AuthContext } from './store/context';
+// import { AuthContext } from './store/context';
 import { DataLayer } from './store/index';
 import reducer, { initialState } from './store/reducer'
+import { AuthContext, AuthProvider } from './store/context';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:5000'
@@ -91,6 +92,8 @@ const SignupStackScreen = () => (
 )
 
 export default function App() {
+  const { user } = useContext(AuthContext)
+
   const [loading, setLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
   const [userData, setUserData] = useState();
@@ -129,17 +132,19 @@ export default function App() {
     <DataLayer initialState={initialState} reducer={reducer}>
       <AppearanceProvider>
         <ApolloProvider client={client}>
-        <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
-            <TabStack.Navigator>
-              <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
-              <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
-              <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
-              <TabStack.Screen name="Details" options={{ headerShown:  false }} component={DetailStackScreen} />
-              <TabStack.Screen name="Success" options={{ headerShown:  false }} component={SuccessStackScreen} />
-              <TabStack.Screen name="Buy Now" options={{headerStyle: {backgroundColor: '#000',borderBottomColor: '#000'}}} component={BuyNowStackScreen} />
-              <TabStack.Screen name="Flights History" component={FlightsHistoryStackScreen} />
-            </TabStack.Navigator>
-        </NavigationContainer>
+          <AuthProvider>
+            <NavigationContainer theme={scheme === "dark" ? DarkTheme : DefaultTheme}>
+                <TabStack.Navigator>
+                  <TabStack.Screen name="Login" options={{ headerShown:  false }} component={LoginStackScreen} />
+                  <TabStack.Screen name="Sign up" options={{ headerShown:  false }} component={SignupStackScreen} />
+                  <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
+                  <TabStack.Screen name="Details" options={{ headerShown:  false }} component={DetailStackScreen} />
+                  <TabStack.Screen name="Success" options={{ headerShown:  false }} component={SuccessStackScreen} />
+                  <TabStack.Screen name="Buy Now" options={{headerStyle: {backgroundColor: '#000',borderBottomColor: '#000'}}} component={BuyNowStackScreen} />
+                  <TabStack.Screen name="Flights History" component={FlightsHistoryStackScreen} />
+                </TabStack.Navigator>
+            </NavigationContainer>
+          </AuthProvider>
         </ApolloProvider>
       </AppearanceProvider>
     </DataLayer>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Text, View, StyleSheet, Dimensions, ScrollView, useColorScheme, TextInput, Modal, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import {useTheme} from '@react-navigation/native'
@@ -6,10 +6,12 @@ import MainHeading from '../Global/MainHeading'
 import Index from '../components/BuyNowComponent/index';
 import ApplePay from '../tones/iphone_pay.mp3'
 import { Audio } from 'expo-av'
+import {AuthContext} from '../store/context';
 
 
 const BuyNow = ({ navigation }) => {
     
+    const { user } = useContext(AuthContext)
     const [chooseData, setChooseData] = useState('Select your place');
     const [soundObj, setSoundObj] = useState(new Audio.Sound);
     const [view, setView] = useState(false);
@@ -28,7 +30,7 @@ const BuyNow = ({ navigation }) => {
 
         const doPlay = () => {
             soundObj.playAsync();
-            }
+        }
 
     const styles = StyleSheet.create({
         container: {
@@ -165,7 +167,7 @@ const BuyNow = ({ navigation }) => {
 
                     <View style={styles.logoText}>
                         <Text style={{color: colors.text, textAlign: 'center', fontWeight: '700'}}>PAYING</Text>
-                        <Text style={{color: colors.text, textAlign: 'center', fontSize: 15.6, letterSpacing: 0.5, paddingTop: 2,}}>Shayan Ullah</Text>
+                        <Text style={{color: colors.text, textAlign: 'center', fontSize: 15.6, letterSpacing: 0.5, paddingTop: 2,}}>{user && user.username}</Text>
                         <Text style={{color: colors.text, fontSize: 45, letterSpacing: 0.5, paddingTop: 20, textAlign: 'center'}}>900$</Text>
 
                     </View>
