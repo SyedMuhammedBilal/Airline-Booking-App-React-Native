@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, useColorScheme } from 'react-native'
 import Inputs from '../components/LoginComponents/Inputs';
-import {AuthContext} from '../store/context';
+import {AuthContext} from '../store/context.js';
 import {useTheme} from '@react-navigation/native'
 
 const DarkLogo = require('../assets/AppleLogo.png');

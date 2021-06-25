@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Text, View, StyleSheet, TouchableOpacity, useColorScheme, ScrollView} from 'react-native'
 import {useTheme} from '@react-navigation/native'
 import MainHeading from '../Global/MainHeading'
@@ -8,15 +8,17 @@ import { AntDesign } from '@expo/vector-icons';
 import gql from 'graphql-tag'
 import {useQuery} from '@apollo/react-hooks'
 import { ActivityIndicator } from "react-native";
+import {FETCH_POSTS_QUERY} from '../graphql/graphqlQuery'
 
-const FlightsHistory = () => {
+
+const FlightsHistory = ({ navigation }) => {
     const { colors } = useTheme();
     const scheme = useColorScheme();
     const DARK_THEME = '#fff'
     const LIGHT_THEME = '#212121'
 
-    const { loading, data: { getPosts: posts } } = useQuery(FETCH_POSTS_QUERY);
 
+    const { loading, data } = useQuery(FETCH_POSTS_QUERY);
 
     const styles = StyleSheet.create({
         textContainer: {
@@ -62,21 +64,26 @@ const FlightsHistory = () => {
                 {/* Flights */}
                 {loading ? <ActivityIndicator /> : 
                     <View style={styles.cardContainer}>
-                        {posts && posts.map((post, index) => {
+                        {data && data?.getPosts?.map((post, index) => {
                             return (
-                                <TouchableOpacity key={index} onPress={() => console.log(data)} style={styles.card}>
+                                <TouchableOpacity key={index} onPress={() => navigation.navigate('Ticket Details', {
+                                    screen: 'Ticket Details',
+                                    params: {
+                                        ticketID: post?.id
+                                    }
+                                })} style={styles.card}>
                                     <LinearGradient colors={['#fc2634', '#ff4551']} start={{x: -1.1, y: -1}} end={{x: 1.5, y: -1}} style={styles.card}>
                                         <View style={styles.cardContent}>
                                             <View style={{paddingLeft: 10}}>
                                                 <AntDesign name="dingding" size={34} color="white" />
                                             </View>
                                             <View style={{paddingLeft: 15}}>
-                                                <Text style={{color: colors.text, fontSize: 18, fontWeight: '600'}}>{post.username}</Text>
-                                                <Text style={{color: colors.text}}>{post.placeName}</Text>
+                                                <Text style={{color: colors.text, fontSize: 18, fontWeight: '600'}}>{post && post?.username}</Text>
+                                                <Text style={{color: colors.text}}>{post && post?.placeName}</Text>
                                             </View>
                                         </View>
                                         <View style={{paddingRight: 20}}>
-                                            <Text style={{color: colors.text, fontSize: 18, fontWeight: '600'}}>${post.amount}</Text>
+                                            <Text style={{color: colors.text, fontSize: 18, fontWeight: '600'}}>${post && post?.amount}</Text>
                                         </View>
                                     </LinearGradient>
                                 </TouchableOpacity>
@@ -84,24 +91,11 @@ const FlightsHistory = () => {
                         })}
                         
                     </View>
-                }
+                } 
                 
             </View>
         </ScrollView>
     )
 }
-
-const FETCH_POSTS_QUERY = gql`
-    {
-        getPosts {
-            id,
-            placeName,
-            amount,
-            username,
-            passport,
-            persons
-        }
-    }
-`;
 
 export default FlightsHistory

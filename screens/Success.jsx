@@ -55,6 +55,7 @@ const Success = ({ navigation }) => {
             <Image source={SuccessGIF} style={splashgif} />
             
             <View style={styles.successText}>
+
                 {/*  */}
                 <GradientText style={{ textAlign: 'center', fontSize: 35, fontWeight: '500' }} color01="#3ef4f7" color02="#0c8ffa">Congratulations</GradientText>
                 <Text style={{color: colors.text, textAlign: 'center', fontSize: 18, paddingTop: 6}}>Your Ticket has been booked</Text>

@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, CheckBox } from 'react-native'
 import {useTheme} from '@react-navigation/native'
-import {NavigationActions} from 'react-navigation'
 import gql from 'graphql-tag'
 import {useMutation} from '@apollo/react-hooks'
 import { ActivityIndicator } from "react-native";
-import { AuthContext } from '../../store/context'
+import { AuthContext } from '../../store/context.js'
 
 const Inputs = ({navigation}) => {
     const [name, setName] = useState('');
@@ -16,7 +15,6 @@ const Inputs = ({navigation}) => {
     
     const [addUser, { loading }] = useMutation(REGISTER_USER, {
         update(_, { data: { register: userData } }) {
-            console.log(userData)
             context.login(userData)
             navigation.navigate('Login')
         },
@@ -37,18 +35,6 @@ const Inputs = ({navigation}) => {
     });
 
     const { colors } = useTheme();
-
-    const nameHandler = (val) => {
-        setName(val)
-    }
-
-    const emailHandler = (val) => {
-        setEmail(val)
-    }
-
-    const passwordHandler = (val) => {
-        setPassword(val)
-    }
 
     const handleData = (e) => {
         addUser()

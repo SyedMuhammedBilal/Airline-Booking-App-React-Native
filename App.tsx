@@ -22,17 +22,38 @@ import Home from './screens/Home';
 import ReviewDetails from './screens/ReviewDetails';
 // import { AuthContext } from './store/context';
 import { DataLayer } from './store/index';
-import reducer, { initialState } from './store/reducer'
+import reducer, { initialStates } from './store/reducer'
 import { AuthContext, AuthProvider } from './store/context';
+import { setContext } from 'apollo-link-context'
+import { AsyncStorage } from 'react-native';
+import TicketDetails from './screens/TicketDetails';
+
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000'
+  uri: 'http://localhost:5000',
+  onError: (e) => { console.log(e) },
+})
+
+const authLink = setContext(async () => {
+
+    const token = await AsyncStorage.getItem('jwtToken');
+    console.log("token => ", token)
+
+    return {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : ''
+      }
+    };
 })
 
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 })
+
+
+
+console.log(authLink);
 
 const Tabstack = createBottomTabNavigator();
 const TabStack = createStackNavigator();
@@ -42,6 +63,7 @@ const HomeStack = createStackNavigator();
 const BuyNowStack = createStackNavigator();
 const SuccessStack = createStackNavigator();
 const FlightsHistoryStack = createStackNavigator();
+const TicketDetailsStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 const DetailStack = createStackNavigator();
 
@@ -77,6 +99,12 @@ const FlightsHistoryStackScreen = () => (
   <FlightsHistoryStack.Navigator>
     <FlightsHistoryStack.Screen name="Flights History" options={{ headerShown:  false }} component={FlightsHistory} />
   </FlightsHistoryStack.Navigator>
+)
+
+const TicketDetailStackScreen = () => (
+  <TicketDetailsStack.Navigator>
+    <TicketDetailsStack.Screen name="Ticket Details" options={{ headerShown:  false }} component={TicketDetails} />
+  </TicketDetailsStack.Navigator>
 )
 
 const LoginStackScreen = () => (
@@ -127,9 +155,10 @@ export default function App() {
       </View>
     )
   };
+  // console.disableYellowBox = true;
 
   return (
-    <DataLayer initialState={initialState} reducer={reducer}>
+    <DataLayer initialState={initialStates} reducer={reducer}>
       <AppearanceProvider>
         <ApolloProvider client={client}>
           <AuthProvider>
@@ -140,6 +169,7 @@ export default function App() {
                   <TabStack.Screen name="Home" options={{ headerLeft: null }} component={HomeStackScreen} />
                   <TabStack.Screen name="Details" options={{ headerShown:  false }} component={DetailStackScreen} />
                   <TabStack.Screen name="Success" options={{ headerShown:  false }} component={SuccessStackScreen} />
+                  <TabStack.Screen name="Ticket Details" component={TicketDetailStackScreen} />
                   <TabStack.Screen name="Buy Now" options={{headerStyle: {backgroundColor: '#000',borderBottomColor: '#000'}}} component={BuyNowStackScreen} />
                   <TabStack.Screen name="Flights History" component={FlightsHistoryStackScreen} />
                 </TabStack.Navigator>

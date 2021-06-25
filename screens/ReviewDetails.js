@@ -7,12 +7,18 @@ import {colors} from 'react-native-elements'
 import {Feather} from '@expo/vector-icons'
 import {GalleryData} from '../Data/GalleryData'
 import Button from '../components/DetailsComponent/Button'
+// import { useRoute } from '@react-navigation/native';
 
-const ReviewDetails = ({ navigation }) => {
+
+const ReviewDetails = ({ route ,navigation }) => {
     const { colors } = useTheme();
     const scheme = useColorScheme();
     const DARK_THEME = '#fff'
     const LIGHT_THEME = '#212121'
+
+    // const route = useRoute();
+
+    const { name, slogan, coverImage, desc, price } = route.params;
 
     const checkThemeColor = () => {
         if(scheme === 'dark') {
@@ -37,14 +43,20 @@ const ReviewDetails = ({ navigation }) => {
             fontSize: 16,
             fontWeight: 'bold',
             paddingHorizontal: 14,
-            marginVertical: 6
+            marginVertical: 6,
+            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 10
         },
         placename: {
             color: '#fff',
             fontSize: 24,
             fontWeight: 'bold',
             paddingHorizontal: 14,
-            marginBottom: 30
+            marginBottom: 30,
+            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 10
         },
         BookTicketBtn: {
             position: 'absolute',
@@ -65,25 +77,30 @@ const ReviewDetails = ({ navigation }) => {
         <View style={{flex: 1}}>
             
             <ImageBackground
-                source={Pic}
+                source={coverImage ? coverImage : Pic}
                 style={styles.image}
                 imageStyle={{borderBottomLeftRadius: 30, borderBottomRightRadius: 30}}
             >
-                <Text style={styles.tagLine}> Discover Dubai </Text>
-                <Text style={styles.placename}>Explore the scenic beauty of huge buildings </Text>
+                <Text style={styles.tagLine}>{name} </Text>
+                <Text style={styles.placename}>{slogan} </Text>
 
                 <TouchableOpacity style={{position: 'absolute', right: 20, top: 70, backgroundColor: '#fff', padding: 10, borderRadius: 40}}>
                     <Feather name="heart" size={22} color="red" />
                 </TouchableOpacity>
             </ImageBackground>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Buy Now')} style={styles.BookTicketBtn}>
+            <TouchableOpacity onPress={() => navigation.navigate('Buy Now', {
+                screen: 'Buy Now',
+                params: {
+                    ticketPrice: price
+                }
+            })} style={styles.BookTicketBtn}>
                 <Text style={styles.bookTicketText}>Book Now</Text>
             </TouchableOpacity>
 
             <ScrollView style={{marginTop: '10%'}}>
                 <Text style={{padding: 14, fontSize: 22, fontWeight: 'bold', color: colors.text}}>About the Place </Text>
-                <Text style={{ paddingHorizontal: 14, fontSize: 14, fontWeight: 'normal', justifyContent: 'flex-start', textAlign: 'justify', lineHeight: 26, color: colors.text}}>Dubai is a city and emirate in the United Arab Emirates known for luxury shopping, ultramodern architecture and a lively nightlife scene. Burj Khalifa, an 830m-tall tower, dominates the skyscraper-filled skyline. At its foot lies Dubai Fountain, with jets and lights choreographed to music. On artificial islands just offshore is Atlantis, The Palm, a resort with water and marine-animal parks. </Text>
+                <Text style={{ paddingHorizontal: 14, fontSize: 14, fontWeight: 'normal', justifyContent: 'flex-start', textAlign: 'justify', lineHeight: 26, color: colors.text}}>{desc} </Text>
 
                 <View>
                     <Text style={{padding: 14, fontSize: 20, fontWeight: 'bold', color: colors.text}}>Suggested Places</Text>

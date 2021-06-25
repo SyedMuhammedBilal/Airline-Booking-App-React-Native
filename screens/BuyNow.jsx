@@ -6,31 +6,76 @@ import MainHeading from '../Global/MainHeading'
 import Index from '../components/BuyNowComponent/index';
 import ApplePay from '../tones/iphone_pay.mp3'
 import { Audio } from 'expo-av'
-import {AuthContext} from '../store/context';
+import gql from 'graphql-tag'
+import {useMutation} from '@apollo/react-hooks'
+import {AuthContext} from '../store/context.js';
+import { ActivityIndicator } from "react-native";
+import {FETCH_POSTS_QUERY} from '../graphql/graphqlQuery';
+// import { ActivityIndicator } from "react-native";
 
+const BuyNow = ({ navigation, route }) => {
 
-const BuyNow = ({ navigation }) => {
     
+
     const { user } = useContext(AuthContext)
+
     const [chooseData, setChooseData] = useState('Select your place');
     const [soundObj, setSoundObj] = useState(new Audio.Sound);
+
+    const [passportNumber, setPassportNumber] = useState('');
+    const [placename, setplaceName] = useState('');
+    const [price, setPrice] = useState('');
+    const [person, setPersons] = useState('');
+    const [errors, setErrors] = useState(null)
+
     const [view, setView] = useState(false);
+
     const { colors } = useTheme();
+    const { ticketPrice } = route.params;
+
+
     const scheme = useColorScheme();
     const DARK_THEME = '#fff'
     const LIGHT_THEME = '#212121'
 
     useEffect(() => {
         async function loadSounds() {
-        await soundObj.loadAsync(require('../tones/iphone_pay.mp3'))
+            await soundObj.loadAsync(require('../tones/iphone_pay.mp3'))
         }
         
         loadSounds();
-        }, [])
+    }, [])
 
-        const doPlay = () => {
-            soundObj.playAsync();
+    const doPlay = () => {
+        soundObj.playAsync();
+    } 
+
+    const setData = (option) => {
+        setChooseData(option)
+        setplaceName(chooseData)
+    }
+
+    const [ newPost, { loading } ] = useMutation(CREATE_POST_MUTATION, {
+        update(proxy, result) {
+            const data = proxy.readQuery({
+                query: FETCH_POSTS_QUERY
+            })
+            data.getPosts = [result.data.createPost, ...data.getPosts];
+            proxy.writeQuery({ query: FETCH_POSTS_QUERY, data })
+            console.log(result)
+            navigation.navigate('Success')
+        },
+        onError(error) {
+            console.log(JSON.stringify(error, null, 2))  
+            setErrors('please enter all fields')
+        },
+        variables: {
+            passport: passportNumber,
+            persons: person,
+            amount: price,
+            placeName: chooseData,
         }
+    })
 
     const styles = StyleSheet.create({
         container: {
@@ -137,18 +182,21 @@ const BuyNow = ({ navigation }) => {
         setView(bool);
     }
 
-    const setData = (option) => {
-        setChooseData(option)
-    }
+    
 
     const playAfterOneSecond = () => {
         setTimeout(() => {
             doPlay()
         }, 1150)
-        navigation.push('Success')
     }
 
-    
+    const handleData = () => {
+        newPost();  
+        console.log(price)
+        console.log(chooseData)
+        console.log(person)
+        console.log(passportNumber)
+    }
 
     return (
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
@@ -168,7 +216,7 @@ const BuyNow = ({ navigation }) => {
                     <View style={styles.logoText}>
                         <Text style={{color: colors.text, textAlign: 'center', fontWeight: '700'}}>PAYING</Text>
                         <Text style={{color: colors.text, textAlign: 'center', fontSize: 15.6, letterSpacing: 0.5, paddingTop: 2,}}>{user && user.username}</Text>
-                        <Text style={{color: colors.text, fontSize: 45, letterSpacing: 0.5, paddingTop: 20, textAlign: 'center'}}>900$</Text>
+                        <Text style={{color: colors.text, fontSize: 45, letterSpacing: 0.5, paddingTop: 20, textAlign: 'center'}}>${ticketPrice}</Text>
 
                     </View>
                 </View>
@@ -181,6 +229,9 @@ const BuyNow = ({ navigation }) => {
                             <TextInput
                                 autoCapitalize='none'
                                 autoCorrect={false}
+                                value={passportNumber}
+                                onChangeText={(val) => setPassportNumber(val)}
+                                name="passport"
                                 style={styles.textInput}
                                 placeholder="Passport number"
                             />
@@ -208,6 +259,9 @@ const BuyNow = ({ navigation }) => {
                         <View style={styles.textInputContainer}>
                             <TextInput
                                 autoCapitalize='none'
+                                name="price"
+                                value={price}
+                                onChangeText={(val) => setPrice(val)}
                                 autoCorrect={false}
                                 style={styles.textInput}
                                 placeholder="Enter price here"
@@ -220,6 +274,9 @@ const BuyNow = ({ navigation }) => {
                             <TextInput
                                 autoCapitalize='none'
                                 autoCorrect={false}
+                                name="persons"
+                                value={person}
+                                onChangeText={(val) => setPersons(val)}
                                 style={styles.textInput}
                                 placeholder="Persons"
                             />
@@ -227,19 +284,48 @@ const BuyNow = ({ navigation }) => {
                     </View>
 
                     <View style={{marginBottom: 50, marginTop: 10}}>
-                        <TouchableOpacity onPress={() => playAfterOneSecond()} style={styles.bookBtn}>
-                            <Text style={{
-                                color: '#fff',
-                                fontSize: 18,
-                                fontWeight: '600'
-                            }}> Book your Ticket Now </Text>
-                            <AntDesign name="rightcircleo" size={24} color="white" />
-                        </TouchableOpacity>
+                        {loading ? <ActivityIndicator /> : 
+                            <TouchableOpacity onPress={() => {playAfterOneSecond(); handleData()}} style={styles.bookBtn}>
+                                <Text style={{
+                                    color: '#fff',
+                                    fontSize: 18,
+                                    fontWeight: '600'
+                                }}> Book your Ticket Now </Text>
+                                <AntDesign name="rightcircleo" size={24} color="white" />
+                            </TouchableOpacity>
+                        }
+                        
                     </View>
                 </View>
             </View>
         </ScrollView>
     )
-}
+};
+
+const CREATE_POST_MUTATION = gql`
+    mutation createPost(
+        $passport: String!
+        $placeName: String!
+        $amount: String!
+        $persons: String!
+    ){
+        createPost(
+            placeName: $placeName
+            amount: $amount
+            passport: $passport
+            persons: $persons
+        
+          ) {
+          id
+          createdAt
+          placeName
+          createdAt
+          username
+          amount
+          persons
+          passport
+        }
+    }
+`
 
 export default BuyNow

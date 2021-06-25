@@ -35,12 +35,14 @@ import {color} from 'react-native-elements/dist/helpers'
 import {AirlineData} from '../Data/AirlineData.js'
 import GradientText from '../Global/GradientText';
 import { AuthContext } from '../store/context.js';
+// import { useNavigation } from '@react-navigation/native';
 
 
 const Home = ({ navigation }) => {
     const { user, logout } = useContext(AuthContext)
     const [users, setUsers] = useState()
     const { colors } = useTheme();
+    // const navigation = useNavigation();
     const scheme = useColorScheme();
     const DARK_THEME = 'dark-content'
     const LIGHT_THEME = 'light-content'
@@ -122,8 +124,18 @@ const Home = ({ navigation }) => {
                 <View style={{marginTop: -125, flex: 1, height: 450, flexGrow: 1}}>
                     {AirlineData.map((items) => {
                         return (
-                            <TouchableOpacity onPress={onPressHandler} key={items.id}>
-                                <SmallCards 
+                            <TouchableOpacity onPress={() => navigation.navigate('Details', { 
+                                screen: 'Details',
+                                params: {
+                                    name: items.name,
+                                    slogan: items.slogans,
+                                    coverImage: items.coverImage,
+                                    desc: items.description,
+                                    price: items.price
+                                }
+                             } )} key={items.id}>
+                                <SmallCards
+                                key={items.id} 
                                     width={items.width} 
                                     left={items.left} 
                                     top={items.top} 

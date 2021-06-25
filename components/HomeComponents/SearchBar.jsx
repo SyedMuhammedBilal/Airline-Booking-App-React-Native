@@ -21,7 +21,7 @@ const SearchBar = () => {
     const Styles = StyleSheet.create({
         searchComponent: {
             marginHorizontal: '4%',
-            backgroundColor: scheme === 'dark' ? 'rgb(72, 72, 74)' : '#fff',
+            backgroundColor: scheme === 'dark' ? 'rgb(28, 28, 30)' : '#fff',
             paddingTop: 10,
             paddingBottom: 10,
             borderRadius: 10,

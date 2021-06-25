@@ -1,31 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
 import {colors} from 'react-native-elements'
 import {useTheme} from '@react-navigation/native'
 import {useDataLayerValue} from '../../store'
 import gql from 'graphql-tag'
 import {useMutation} from '@apollo/react-hooks'
 import { ActivityIndicator } from "react-native";   
-import { AuthContext } from '../../store/context'
+import { AuthContext } from '../../store/context.js'
 
 const Inputs = ({ navigation }) => {
     const context = useContext(AuthContext);
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [userData, setUserData] = useState(null);
-    const [errors, setErros] = useState(null);
+    const [errors, setErrors] = useState({});
     const [{ user, token }, dispatch] = useDataLayerValue();
 
     const { colors } = useTheme();
 
     const [loginUser, { loading }] = useMutation(LOGIN_USER, {
         update(_, { data: { login: userData } }) {
-            console.log("===>", userData);
             context.login(userData)
             navigation.navigate('Home')
         },
-        onError(error) {
-            setErrors('please enter all fields')
+        onError: (err) => {
+            setErrors(err.graphQLErrors[0].extensions.exception.errors);
         },
         variables: {
             email: email,
@@ -33,17 +32,26 @@ const Inputs = ({ navigation }) => {
         }
     })
 
+    const ErrorAlert = () => {
+        Alert.alert('Invalid Credentials', 'Please try again', [
+            { text: 'cancel', onPress: () => console.log('alert closed') }
+        ])
+    }
+
     const login = () => {
-        loginUser()
+        loginUser();
+
+        setEmail('');
+        setPassword('');
+                
     }
 
     useEffect(() => {
         dispatch({
             type: 'LOGIN',
             user: userData
-        })
+        });
     },[])
-    console.log(user);
     
 
     const Styles = StyleSheet.create({ 
