@@ -36,6 +36,18 @@ const Inputs = ({navigation}) => {
 
     const { colors } = useTheme();
 
+    const ErrorAlert = () => {
+        Alert.alert('Invalid Credentials', 'Please try again', [
+            { text: 'cancel', onPress: () => console.log('alert closed') }
+        ])
+    }
+
+    const formFiledsValidator = () => {
+        if(name.length === 0 && email.length === 0 && password.length === 0) {
+            ErrorAlert();
+        } 
+    }
+
     const handleData = (e) => {
         addUser()
     };

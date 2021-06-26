@@ -89,10 +89,8 @@ const FlightsHistory = ({ navigation }) => {
                                 </TouchableOpacity>
                             )
                         })}
-                        
                     </View>
                 } 
-                
             </View>
         </ScrollView>
     )

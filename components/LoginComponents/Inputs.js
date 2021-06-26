@@ -46,6 +46,12 @@ const Inputs = ({ navigation }) => {
                 
     }
 
+    const formFiledsValidator = () => {
+        if(email.length === 0 && password.length === 0) {
+            ErrorAlert();
+        }
+    }
+
     useEffect(() => {
         dispatch({
             type: 'LOGIN',
@@ -106,7 +112,7 @@ const Inputs = ({ navigation }) => {
                 {loading ? 
                     <ActivityIndicator />
                     : 
-                        <TouchableOpacity onPress={() => {login()} } style={Styles.LoginBtn}>
+                        <TouchableOpacity onPress={() => {login(); formFiledsValidator()} } style={Styles.LoginBtn}>
                             <Text style={{
                                 color: '#fff',
                                 fontSize: 18,
