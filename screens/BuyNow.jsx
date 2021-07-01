@@ -63,7 +63,7 @@ const BuyNow = ({ navigation, route }) => {
             data.getPosts = [result.data.createPost, ...data.getPosts];
             proxy.writeQuery({ query: FETCH_POSTS_QUERY, data })
             console.log(result)
-            navigation.navigate('Success')
+            
         },
         onError(error) {
             console.log(JSON.stringify(error, null, 2))  
@@ -285,7 +285,7 @@ const BuyNow = ({ navigation, route }) => {
 
                     <View style={{marginBottom: 50, marginTop: 10}}>
                         {loading ? <ActivityIndicator /> : 
-                            <TouchableOpacity onPress={() => {playAfterOneSecond(); handleData()}} style={styles.bookBtn}>
+                            <TouchableOpacity onPress={() => {playAfterOneSecond(); handleData(); navigation.navigate('Success')}} style={styles.bookBtn}>
                                 <Text style={{
                                     color: '#fff',
                                     fontSize: 18,
